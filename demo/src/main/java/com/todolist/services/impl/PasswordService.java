@@ -18,12 +18,12 @@ public class PasswordService {
     }
 
 
-    public String securePassword(String password) {
-        Argon2 argon2 = getArgon2Instance();
-
-        return argon2.hash(passwordConfig.getIterations(), passwordConfig.getMemory(), passwordConfig.getParallelism() , password.toCharArray());
-
-    }
+//    public String securePassword(String password) {
+//        Argon2 argon2 = getArgon2Instance();
+//
+//        return argon2.hash(passwordConfig.getIterations(), passwordConfig.getMemory(), passwordConfig.getParallelism() , password.toCharArray());
+//
+//    }
 
     private Argon2 getArgon2Instance() {
         Argon2Factory.Argon2Types type = Argon2Factory.Argon2Types.ARGON2d;

@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-//    private final PasswordEncoder encoder;
+    //    private final PasswordEncoder encoder;
     private final PasswordService passwordService;
     private final RoleRepository roleRepository;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
         user.setRole(role);
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(passwordService.securePassword(userDTO.getPassword()));
+//        user.setPassword(passwordService.securePassword(userDTO.getPassword()));
 
         logger.info("Creating user: {}", user);
         userRepository.save(user);
@@ -78,13 +78,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(Long id){
+    public void deleteUserById(Long id) {
         userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
 
         userRepository.deleteById(id);
     }
-
 
 
     @Override

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
-@RestController
+@RestController("/api/v1/auth")
 @ResponseBody
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -28,7 +28,7 @@ public class UserController {
             this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/getall")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         logger.info("Fetching all users: ");
         System.out.println("Fetching all users:");
@@ -52,14 +52,14 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/users/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
         logger.info("Deleting task by id: {}", id);
         userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/users/create")
+    @PostMapping("/create")
     public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
         logger.info("Creating user: {}", userDTO);
 

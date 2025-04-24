@@ -6,7 +6,8 @@ import jakarta.persistence.Table;
 import lombok.*;
 import java.util.List;
 import java.util.ArrayList;
-import com.todolist.model.Role_name;
+
+
 @Entity
 @ToString
 @Setter
@@ -14,7 +15,6 @@ import com.todolist.model.Role_name;
 @AllArgsConstructor
 @Table(name = "roles")
 @NoArgsConstructor
-
 public class Role {
 
     @Id
@@ -31,5 +31,9 @@ public class Role {
     private List<User> users = new ArrayList<>();
 
     public Role(long roleId, Role_name roleName) {
+    }
+
+    public Role_name getRoleName() {
+        return roleName;
     }
 }
