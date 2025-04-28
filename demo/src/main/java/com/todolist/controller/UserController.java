@@ -39,6 +39,7 @@ public class UserController {
         return ResponseEntity.ok(users);
 
     }
+
     @GetMapping("/users_task/{id}")
     public ResponseEntity<UserDTO> getUserByTask(@PathVariable Long id) {
         logger.info("Fetching users by task: ");
@@ -56,13 +57,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-//    @PostMapping("/create")
-//    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
-//        logger.info("Creating user: {}", userDTO);
-//
-//        userService.createUser(userDTO);
-//        return ResponseEntity.status(HttpStatus.CREATED).build();
-//    }
 
     @GetMapping("/users/{id}")
     public ResponseEntity<Optional<UserDTO>> getUserById(@PathVariable Long id) {
@@ -72,28 +66,6 @@ public class UserController {
     }
 
 
-
-//    @PostMapping("/register")
-//    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO userDTO)  {
-//        UserDTO createdUser  = userServices.registerUser(userDTO);
-//        return ResponseEntity.ok(createdUser);
-//
-//    }
-
-//    @GetMapping("/findbyID")
-//    public User findByID(@RequestParam int id){
-//        return userServices.findById(id);
-//    }
-//
-//    @PostMapping("/updateUser")
-//    public User updateUser(@RequestBody User users,@RequestParam int id){
-//        return userServices.updateUser(id,users);
-//    }
-//
-//    @DeleteMapping("/deleteUser")
-//    public void deleteUserByID(@RequestParam int id){
-//        userServices.deleteUserByID(id);
-//    }
 
 
 

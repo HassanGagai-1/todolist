@@ -11,7 +11,9 @@ import java.util.ArrayList;
 @Entity
 @Data
 @AllArgsConstructor
-@Table(name = "roles")
+@Table(name = "roles",
+        uniqueConstraints = @UniqueConstraint(columnNames = "role_name")
+)
 @NoArgsConstructor
 public class Role {
 
@@ -28,6 +30,13 @@ public class Role {
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users = new ArrayList<>();
 
+
     public Role(long roleId, Role_name roleName) {
+        this.role_id  = roleId;
+        this.roleName = roleName;
+    }
+
+    public Role(Role_name roleName) {
+        this.roleName = roleName;
     }
 }

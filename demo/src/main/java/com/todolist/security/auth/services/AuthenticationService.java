@@ -8,8 +8,11 @@ import com.todolist.security.auth.AuthenticationRequest;
 import com.todolist.security.auth.AuthenticationResponse;
 import com.todolist.security.auth.RegisterRequest;
 import com.todolist.services.impl.JwtService;
+import com.todolist.services.impl.TaskServiceImpl;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,36 +25,36 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final RoleRepository roleRepository;
 
-    public AuthenticationResponse register(RegisterRequest request) {
-        Role role = new Role();
-        User user = new User();
+        public AuthenticationResponse register(RegisterRequest request) {
 
-        role.setRoleName(Role_name.USER);
-        roleRepository.save(role);
+            Role role = roleRepository.findByRoleName(Role_name.USER)
+                    .orElseGet(() -> roleRepository.save(new Role(Role_name.USER)));
+            
+            logger.info("User Role: {}", role);
+            User user = new User();
 
-//        var user = User.builder()
-//                .name(request.getName())
-//                .email(request.getEmail())
-//                .password(passwordEncoder.encode(request.getPassword()))
-//                .role(role)
-//                .build();
-        user.setRole(role);
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse
-                .builder()
-                .token(jwtToken)
-                .build();
-    }
+
+            user.setRole(role);
+            user.setName(request.getName());
+
+            user.setEmail(request.getEmail());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            userRepository.save(user);
+            var jwtToken = jwtService.generateToken(user);
+            return AuthenticationResponse
+                    .builder()
+                    .token(jwtToken)
+                    .build();
+        }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
