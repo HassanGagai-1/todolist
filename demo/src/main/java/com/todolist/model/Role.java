@@ -9,9 +9,7 @@ import java.util.ArrayList;
 
 
 @Entity
-@ToString
-@Setter
-@Getter
+@Data
 @AllArgsConstructor
 @Table(name = "roles")
 @NoArgsConstructor
@@ -31,9 +29,5 @@ public class Role {
     private List<User> users = new ArrayList<>();
 
     public Role(long roleId, Role_name roleName) {
-    }
-
-    public Role_name getRoleName() {
-        return roleName;
     }
 }

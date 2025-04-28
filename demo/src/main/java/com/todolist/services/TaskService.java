@@ -6,13 +6,14 @@ import com.todolist.services.impl.TaskServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
 public interface TaskService {
 
     List<TaskDTO> getAllTasks();
-    Stream<TaskDTO> getTaskById(Long id);
+    Optional<TaskDTO> getTaskById(Long id);
     void createTask(TaskDTO taskDTO);
     void deleteTaskById(Long id);
     void updateTaskById(Long id, TaskDTO taskDTO);

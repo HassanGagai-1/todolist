@@ -1,10 +1,7 @@
 package com.todolist.controller;
 
-import com.todolist.dto.TaskDTO;
 import com.todolist.dto.UserDTO;
-import com.todolist.model.Task;
 import com.todolist.services.UserService;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 
-@RestController("/api/v1/auth")
+@RestController()
 @ResponseBody
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -59,18 +56,18 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
-        logger.info("Creating user: {}", userDTO);
-
-        userService.createUser(userDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserDTO userDTO) {
+//        logger.info("Creating user: {}", userDTO);
+//
+//        userService.createUser(userDTO);
+//        return ResponseEntity.status(HttpStatus.CREATED).build();
+//    }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<Stream<UserDTO>> getUserById(@PathVariable Long id) {
+    public ResponseEntity<Optional<UserDTO>> getUserById(@PathVariable Long id) {
         logger.info("Fetching user by id: {}", id);
-        Stream<UserDTO> user = userService.getUserById(id);
+        Optional<UserDTO> user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 

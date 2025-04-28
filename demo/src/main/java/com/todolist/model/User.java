@@ -15,12 +15,11 @@ import java.util.ArrayList;
 
 @AllArgsConstructor
 @Entity
-@Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "user_info")
-@ToString
 @Builder
+@ToString(exclude = {"password","tasks","categories"})
+@Data
 public class User implements UserDetails {
 
     @Id

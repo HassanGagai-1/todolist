@@ -10,11 +10,9 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Entity
-@Getter
-@Setter
 @Table(name = "task")
-@ToString
 @NoArgsConstructor
+@Data
 public class Task {
 
     @Id

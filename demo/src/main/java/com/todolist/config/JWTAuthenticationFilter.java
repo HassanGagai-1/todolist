@@ -37,7 +37,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         final String userEmail;
         logger.info("Authenticating user with JWT token");
         logger.info("Auth header: {}", authHeader);
-        if (authHeader == null || authHeader.startsWith(" Bearer ")) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             logger.info("No JWT token found");
             return;
@@ -48,7 +48,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         logger.info("User email: {}", userEmail);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            logger.info("User details: {}", userDetails);
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 logger.info("JWT token is valid");
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -56,6 +55,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                         null,
                         userDetails.getAuthorities()
                 );
+                logger.info("Setting authentication for user: {}", userEmail);
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
@@ -63,5 +63,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
+        logger.info("Authentication filter completed");
     }
 }

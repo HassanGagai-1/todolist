@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,7 +39,7 @@ public class TaskServiceImpl implements TaskService {
 
     public List<TaskDTO> getAllTasks() {
         return taskRepository.findAll()
-                .stream()
+                .parallelStream()
                 .map(task -> new TaskDTO(
                         task.getId(), task.getTask(), task.getDescription(),
                 task.getCreated_at(), task.getDueDate(), task.getStatus().name(),
@@ -53,15 +54,18 @@ public class TaskServiceImpl implements TaskService {
 
 
 
-    public Stream<TaskDTO> getTaskById(Long id) {
-        return taskRepository.findById(id)
-                .stream()
+    public Optional<TaskDTO> getTaskById(Long id) {
+        logger.info("Getting task by ID: {}", id);
+        return Optional.ofNullable(taskRepository.findById(id)
                 .map(task -> new TaskDTO(task.getId(), task.getTask(), task.getDescription(),
                         task.getCreated_at(), task.getDueDate(),
                         task.getStatus().name(), task.getPriority().name(),
                         new UserDTO(
                                 task.getUser().getId()
                         )
+                ))
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found")
                 ));
     }
 
@@ -70,9 +74,17 @@ public class TaskServiceImpl implements TaskService {
         if (taskDTO == null || taskDTO.getUser() == null || taskDTO.getUser().getId() == 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User ID must be provided");
         }
+        if (taskDTO.getTask() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task must be provided");
+        }
+        if (taskDTO.getDueDate() == taskDTO.getCreated_at()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task due date must be different from created date");
+        }
 
         Task task = new Task();
-        task.setTask(taskDTO.getTask());
+        task.setTask(
+                taskDTO.getTask()
+        );
         task.setDescription(taskDTO.getDescription());
         task.setCreated_at(LocalDateTime.now());
         task.setDueDate(taskDTO.getDueDate());

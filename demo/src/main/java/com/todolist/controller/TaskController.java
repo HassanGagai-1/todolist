@@ -1,9 +1,7 @@
 package com.todolist.controller;
 
 import com.todolist.dto.TaskDTO;
-import com.todolist.model.Task;
 import com.todolist.services.TaskService;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,9 +35,9 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/{id}")
-    public ResponseEntity<List<TaskDTO>> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<Optional<TaskDTO>> getTaskById(@PathVariable Long id) {
         logger.info("Fetching task by id: {}", id);
-        List<TaskDTO> tasks = taskService.getTaskById(id).toList();
+        Optional<TaskDTO> tasks = taskService.getTaskById(id);
         logger.info("Fetched tasks: {}", tasks);
         return ResponseEntity.ok(tasks); // automatic conversion to JSON
     }
