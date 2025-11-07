@@ -43,11 +43,16 @@ public class TaskController {
     }
 
     @PostMapping("/tasks/create")
-    public ResponseEntity<Void> createTask(@RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<?> createTask(@RequestBody TaskDTO taskDTO) {
 
         logger.info("Creating task: {}", taskDTO);
-        taskService.createTask(taskDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        TaskDTO savedTask = taskService.createTask(taskDTO);
+        return ResponseEntity.ok(
+                java.util.Map.of(
+                        "message", "Task created successfully",
+                        "taskId", savedTask.getId()
+                )
+        );
     }
 
     @DeleteMapping("/tasks/delete/{id}")

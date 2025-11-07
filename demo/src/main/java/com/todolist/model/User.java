@@ -18,7 +18,7 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @Table(name = "user_info")
 @Builder
-@ToString(exclude = {"password","tasks","categories"})
+@ToString(exclude = {"password","tasks","categories","role"})
 @Data
 public class User implements UserDetails {
 
@@ -53,12 +53,12 @@ public class User implements UserDetails {
     private List<Category> categories = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private Role_name role_name;
+    private roleName role_name;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(Role_name.USER.toString()));
+        return List.of(new SimpleGrantedAuthority(roleName.USER.toString()));
     }
 
     @Override

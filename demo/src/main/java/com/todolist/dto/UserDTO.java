@@ -2,6 +2,8 @@ package com.todolist.dto;
 
 
 import com.todolist.model.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.List;
@@ -45,4 +47,6 @@ public class UserDTO {
     }
 
 
+    public UserDTO(long id, @Email @NotBlank String email) {
+    }
 }

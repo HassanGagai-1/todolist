@@ -58,24 +58,25 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() ->
                         new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
                 );
+        return  new UserDTO(user.getId(), user.getName(), user.getEmail());
 
-        List<TaskDTO> tasks = user.getTasks().stream()
-                .map(task -> new TaskDTO(
-                        task.getId(),
-                        task.getTask(),
-                        task.getDescription(),
-                        task.getCreated_at(),    // or getCreated_at()
-                        task.getDueDate(),
-                        task.getStatus().name(),
-                        task.getPriority().name()
-                ))
-                .collect(Collectors.toList());
-        return new UserDTO(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                tasks
-        );
+//        List<TaskDTO> tasks = user.getTasks().stream()
+//                .map(task -> new TaskDTO(
+//                        task.getId(),
+//                        task.getTask(),
+//                        task.getDescription(),
+//                        task.getCreated_at(),    // or getCreated_at()
+//                        task.getDueDate(),
+//                        task.getStatus().name(),
+//                        task.getPriority().name()
+//                ))
+//                .collect(Collectors.toList());
+//        return new UserDTO(
+//                user.getId(),
+//                user.getName(),
+//                user.getEmail(),
+//                tasks
+//        );
     }
 
 }

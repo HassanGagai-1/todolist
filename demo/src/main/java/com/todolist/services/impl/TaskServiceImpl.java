@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -70,8 +70,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Transactional
-    public void createTask(TaskDTO taskDTO) {
-        if (taskDTO == null || taskDTO.getUser() == null || taskDTO.getUser().getId() == 0) {
+    public TaskDTO createTask(TaskDTO taskDTO) {
+        if (taskDTO == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User ID must be provided");
         }
         if (taskDTO.getTask() == null) {
@@ -80,6 +80,9 @@ public class TaskServiceImpl implements TaskService {
         if (taskDTO.getDueDate() == taskDTO.getCreated_at()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Task due date must be different from created date");
         }
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new RuntimeException("User not found"));
 
         Task task = new Task();
         task.setTask(
@@ -96,11 +99,10 @@ public class TaskServiceImpl implements TaskService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid status or priority value");
         }
 
-        User user = userRepository.findById(taskDTO.getUser().getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
 
         task.setUser(user);
-        taskRepository.save(task);
+        Task savedTask = taskRepository.save(task);
+        return TaskDTO.fromEntity(savedTask);
     }
 
     @Override

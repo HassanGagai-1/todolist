@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Registration</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="container">
+    <div>
+        <form id="taskCreation">
+            <input type="text" name="task" placeholder="task" id="task"><br>
+            <input type="text" name="description" placeholder="description" id="description"><br>
+            <input type="datetime-local" name="dueDate" placeholder="dueDate" id="dueDate"><br>
+            <select id="priority" name="priority">
+                <option value="HIGH">HIGH</option>
+                <option value="MEDIUM">MEDIUM</option>
+                <option value="LOW">LOW</option>
+                </select>
+            <label for="status"></label><select id="status" name="status">
+                <option value="PENDING">PENDING</option>
+                <option value="COMPLETED">COMPLETED</option>
+            </select>
+            <button type="submit" id="submit">Create Task</button>
+        </form>
+        <p id="message"></p>
+    </div>
+    <a href="/login.html" class="btn-link">Login</a>
+
+</div>
+<script src="js/index.js"></script>
+</body>
+</html>

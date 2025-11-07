@@ -24,19 +24,19 @@ public class Role {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name", nullable = false, length = 32)
-    private Role_name roleName = Role_name.USER;
+    private roleName roleName = com.todolist.model.roleName.USER;
 
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users = new ArrayList<>();
 
 
-    public Role(long roleId, Role_name roleName) {
+    public Role(long roleId, roleName roleName) {
         this.role_id  = roleId;
         this.roleName = roleName;
     }
 
-    public Role(Role_name roleName) {
+    public Role(roleName roleName) {
         this.roleName = roleName;
     }
 }

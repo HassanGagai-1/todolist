@@ -4,7 +4,7 @@ package com.todolist.model;
 import lombok.Getter;
 
 @Getter
-public enum Role_name {
+public enum roleName {
     ADMIN,
     USER
 }
