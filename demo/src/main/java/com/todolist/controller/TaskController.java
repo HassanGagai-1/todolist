@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @ResponseBody
+@RequestMapping("/api/v1/tasks")
 public class TaskController {
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
 
@@ -27,14 +28,14 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping("/tasks")
+    @GetMapping("/fetchAll")
     public ResponseEntity<List<TaskDTO>> getAllTasks() {
         List<TaskDTO> tasks = taskService.getAllTasks();
         return ResponseEntity.ok(tasks);
 
     }
 
-    @GetMapping("/tasks/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Optional<TaskDTO>> getTaskById(@PathVariable Long id) {
         logger.info("Fetching task by id: {}", id);
         Optional<TaskDTO> tasks = taskService.getTaskById(id);
@@ -42,7 +43,7 @@ public class TaskController {
         return ResponseEntity.ok(tasks); // automatic conversion to JSON
     }
 
-    @PostMapping("/tasks/create")
+    @PostMapping("/create")
     public ResponseEntity<?> createTask(@RequestBody TaskDTO taskDTO) {
 
         logger.info("Creating task: {}", taskDTO);
@@ -55,14 +56,14 @@ public class TaskController {
         );
     }
 
-    @DeleteMapping("/tasks/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTaskById(@PathVariable Long id) {
         logger.info("Deleting task by id: {}", id);
         taskService.deleteTaskById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PutMapping("/tasks/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Void> updateTaskById(@PathVariable Long id,@RequestBody TaskDTO taskDTO) {
             logger.info("Updating task by id: {}", id);
             taskService.updateTaskById(id,taskDTO);

@@ -26,6 +26,7 @@ const form = document.getElementById("registerForm");
         const result = await response.json();
 
         //Step 7: Show message on page
+
         const messageEl = document.getElementById("message");
         messageEl.textContent = (result.message || "User registered successfully");
         localStorage.setItem("token", result.token);

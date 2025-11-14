@@ -52,7 +52,10 @@ public class SecurityConfiguration {
                                 "/login.html",
                                 "/index.html",
                                 "/images/**",
-                                "/tasks/create")
+                                "/view.html",
+                                "/api/v1/tasks/**",
+                                "/api/v1/tasks/update/",
+                                "/create-task.html")
                         .permitAll()
                         .anyRequest().authenticated());
         http.sessionManagement(
@@ -74,24 +77,4 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-
-
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf()
-//                .disable()
-//                .authorizeHttpRequests()
-//                .requestMatchers("/api/v1/auth/**", "/error")
-//                .permitAll()
-//                .anyRequest()
-//                .authenticated()
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-//        return http.build();
-//    }
 }

@@ -41,7 +41,6 @@ public class AuthenticationService {
             logger.info("User Role: {}", role);
             User user = new User();
 
-
             user.setRole(role);
             user.setName(request.getName());
 

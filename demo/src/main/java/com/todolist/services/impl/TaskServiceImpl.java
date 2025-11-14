@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,14 +39,18 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public List<TaskDTO> getAllTasks() {
-        return taskRepository.findAll()
-                .parallelStream()
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        logger.info("userEmail: {}", userEmail);
+
+        return taskRepository.findByUserEmail(userEmail)
+                .stream()
                 .map(task -> new TaskDTO(
                         task.getId(), task.getTask(), task.getDescription(),
                 task.getCreated_at(), task.getDueDate(), task.getStatus().name(),
                         task.getPriority().name(),
                 new UserDTO(
-                        task.getUser().getId()
+                        task.getUser().getId(), task.getUser().getEmail()
                 )
                 ))
                 .collect(Collectors.toList());
@@ -83,7 +88,6 @@ public class TaskServiceImpl implements TaskService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()-> new RuntimeException("User not found"));
-
         Task task = new Task();
         task.setTask(
                 taskDTO.getTask()
@@ -91,6 +95,8 @@ public class TaskServiceImpl implements TaskService {
         task.setDescription(taskDTO.getDescription());
         task.setCreated_at(LocalDateTime.now());
         task.setDueDate(taskDTO.getDueDate());
+        System.out.println("Here is our createdDate: "+ (LocalDateTime.now()));
+        System.out.println("Here is our dueDate: "+ taskDTO.getDueDate());
 
         try {
             task.setStatus(Status.valueOf(taskDTO.getStatus()));
@@ -102,6 +108,7 @@ public class TaskServiceImpl implements TaskService {
 
         task.setUser(user);
         Task savedTask = taskRepository.save(task);
+        System.out.println("Task saved with DueDate: " + savedTask.getDueDate());
         return TaskDTO.fromEntity(savedTask);
     }
 
@@ -120,12 +127,14 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public void updateTaskById(Long id, TaskDTO taskDTO) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new RuntimeException("User not found"));
+
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task ID not found"));
         if (taskDTO == null ) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "task Object is null");
-        } else if (taskDTO.getUser() == null || taskDTO.getUser().getId() == 0) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "user ID not provided");
         }
 
 

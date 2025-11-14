@@ -26,6 +26,7 @@ public class TaskDTO {
     private String priority;
 
     private UserDTO user;
+
     public static TaskDTO fromEntity(Task task) {
         TaskDTO dto = new TaskDTO();
 
@@ -43,27 +44,12 @@ public class TaskDTO {
             dto.setPriority(task.getPriority().name());
         }
 
-        // ✅ Convert user to UserDTO if needed
         if (task.getUser() != null) {
             dto.setUser(new UserDTO(task.getUser().getId(), task.getUser().getEmail()));
         }
 
         return dto;
     }
-
-
-
-//    public TaskDTO(long id, @NotBlank String task, String description, LocalDateTime created_at,
-//                   LocalDateTime dueDate, String name, String name1) {
-//
-//        this.id = id;
-//        this.task = task;
-//        this.description = description;
-//        this.created_at = created_at;
-//        this.dueDate = dueDate;
-//        this.status = name;
-//        this.priority = name1;
-//    }
 
 
 }

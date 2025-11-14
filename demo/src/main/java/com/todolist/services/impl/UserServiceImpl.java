@@ -1,7 +1,6 @@
 package com.todolist.services.impl;
 
 
-import com.todolist.dto.TaskDTO;
 import com.todolist.dto.UserDTO;
 import com.todolist.repository.UserRepository;
 import com.todolist.model.User;

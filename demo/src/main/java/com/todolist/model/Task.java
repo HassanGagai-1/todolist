@@ -27,17 +27,16 @@ public class Task {
     @Column(name = "description")
     private String description;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime created_at;
 
-    @CreationTimestamp
     @Column(name = "dueDate")
     private LocalDateTime dueDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id",nullable = false)
     private User user;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
